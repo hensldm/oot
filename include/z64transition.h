@@ -62,23 +62,25 @@ typedef enum {
 
 #define TRANS_TYPE_CIRCLE(appearance, color, speed) ((1 << 5) | ((color & 3) << 3) | ((appearance & 3) << 1) | (speed & 1))
 
+typedef union TransitionInstance {
+    TransitionFade fade;
+    TransitionCircle circle;
+    TransitionTriforce triforce;
+    TransitionWipe wipe;
+} TransitionInstance;
+
 typedef struct {
-    union {
-        TransitionFade fade;
-        TransitionCircle circle;
-        TransitionTriforce triforce;
-        TransitionWipe wipe;
-    } instanceData;
+    /* 0x000 */ TransitionInstance instanceData;
     /* 0x228 */ s32   transitionType;
-    /* 0x22C */ void* (*init)(void* transition);
-    /* 0x230 */ void  (*destroy)(void* transition);
-    /* 0x234 */ void  (*update)(void* transition, s32 updateRate);
-    /* 0x238 */ void  (*draw)(void* transition, Gfx** gfxP);
-    /* 0x23C */ void  (*start)(void* transition);
-    /* 0x240 */ void  (*setType)(void* transition, s32 type);
-    /* 0x244 */ void  (*setColor)(void* transition, u32 color);
-    /* 0x248 */ void  (*setUnkColor)(void* transition, u32 color);
-    /* 0x24C */ s32   (*isDone)(void* transition);
+    /* 0x22C */ void* (*init)(TransitionInstance* transition);
+    /* 0x230 */ void  (*destroy)(TransitionInstance* transition);
+    /* 0x234 */ void  (*update)(TransitionInstance* transition, s32 updateRate);
+    /* 0x238 */ void  (*draw)(TransitionInstance* transition, Gfx** gfxP);
+    /* 0x23C */ void  (*start)(TransitionInstance* transition);
+    /* 0x240 */ void  (*setType)(TransitionInstance* transition, s32 type);
+    /* 0x244 */ void  (*setColor)(TransitionInstance* transition, u32 color);
+    /* 0x248 */ void  (*setUnkColor)(TransitionInstance* transition, u32 color);
+    /* 0x24C */ s32   (*isDone)(TransitionInstance* transition);
 } TransitionContext; // size = 0x250
 
 #endif

@@ -204,7 +204,7 @@ void Play_Destroy(GameState* thisx) {
     }
 
     Letterbox_Destroy();
-    TransitionFade_Destroy(&this->transitionFadeFlash);
+    TransitionFade_Destroy((TransitionInstance*)&this->transitionFadeFlash);
     VisMono_Destroy(&sPlayVisMono);
 
     if (gSaveContext.save.linkAge != this->linkAgeOnLoad) {
@@ -399,10 +399,10 @@ void Play_Init(GameState* thisx) {
     }
 
     Letterbox_Init();
-    TransitionFade_Init(&this->transitionFadeFlash);
-    TransitionFade_SetType(&this->transitionFadeFlash, TRANS_INSTANCE_TYPE_FADE_FLASH);
-    TransitionFade_SetColor(&this->transitionFadeFlash, RGBA8(160, 160, 160, 255));
-    TransitionFade_Start(&this->transitionFadeFlash);
+    TransitionFade_Init((TransitionInstance*)&this->transitionFadeFlash);
+    TransitionFade_SetType((TransitionInstance*)&this->transitionFadeFlash, TRANS_INSTANCE_TYPE_FADE_FLASH);
+    TransitionFade_SetColor((TransitionInstance*)&this->transitionFadeFlash, RGBA8(160, 160, 160, 255));
+    TransitionFade_Start((TransitionInstance*)&this->transitionFadeFlash);
     VisMono_Init(&sPlayVisMono);
     gVisMonoColor.a = 0;
     CutsceneFlags_UnsetAll(this);
@@ -999,7 +999,7 @@ void Play_Update(PlayState* this) {
             Letterbox_Update(R_UPDATE_RATE);
 
             PLAY_LOG(3783);
-            TransitionFade_Update(&this->transitionFadeFlash, R_UPDATE_RATE);
+            TransitionFade_Update((TransitionInstance*)&this->transitionFadeFlash, R_UPDATE_RATE);
         } else {
             goto skip;
         }
@@ -1122,7 +1122,7 @@ void Play_Draw(PlayState* this) {
                 this->transitionCtx.draw(&this->transitionCtx.instanceData, &gfxP);
             }
 
-            TransitionFade_Draw(&this->transitionFadeFlash, &gfxP);
+            TransitionFade_Draw((TransitionInstance*)&this->transitionFadeFlash, &gfxP);
 
             if (gVisMonoColor.a > 0) {
                 sPlayVisMono.vis.primColor.rgba = gVisMonoColor.rgba;
